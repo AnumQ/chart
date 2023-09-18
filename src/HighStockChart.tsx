@@ -42,7 +42,7 @@ function createStockChartInContainer(data: StockData[]) {
         type: "candlestick",
       },
     ],
-    chart: { backgroundColor: "black" },
+    chart: { backgroundColor: "#f4f4f4" },
   };
   Highcharts.stockChart("stock-chart-container", options);
 }

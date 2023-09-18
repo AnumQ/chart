@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StockDataTable } from "./UI/StockDataTable";
-import "./App.css";
 import axios from "axios";
 import { StockData } from "./Models/StockData";
 import HighStockChart from "./HighStockChart";
 import { buildURL } from "./URLbuilder";
-
 
 function App() {
   const [data, setData] = useState<StockData[]>([]);
@@ -16,6 +14,7 @@ function App() {
 
   return (
     <div className="App">
+      <div className="my-component">This is a styled component.</div>
       <HighStockChart data={data} />
       <StockDataTable data={data} />
     </div>
@@ -39,25 +38,3 @@ const fetchData = async (
     console.error("Error fetching data:", error);
   }
 };
-
-
-
-// interface ChartOptionsProps {
-//   caption?: CaptionOptions;
-//   xAxis: {
-//     categories: string[];
-//   };
-//   chart?: ChartOptions;
-//   series: {
-//     data: number[];
-//   }[];
-//   plotOptions: {
-//     series: {
-//       point: {
-//         events: {
-//           mouseOver(e: { target: { category: string } }): void;
-//         };
-//       };
-//     };
-//   };
-// }
