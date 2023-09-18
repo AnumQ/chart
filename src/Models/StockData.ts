@@ -1,5 +1,5 @@
 export interface StockData {
-  date: string;
+  date: number | string;
   open: number;
   high: number;
   low: number;

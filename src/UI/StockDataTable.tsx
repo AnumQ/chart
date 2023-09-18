@@ -1,8 +1,10 @@
-import { StockData, StockDataProps} from "../Models/StockData";
+import { StockData, StockDataProps } from "../Models/StockData";
 const renderStockData = (data: StockData[]) => {
   if (data.length === 0) {
     return <p>No data available</p>;
   }
+
+  console.log(data);
 
   return (
     <table>
@@ -34,6 +36,11 @@ const renderStockData = (data: StockData[]) => {
   );
 };
 
-export const StockDataTable: React.FC<StockDataProps> = ({ data }) => {
+export const StockDataTable: React.FC<StockDataProps> = ({
+  data,
+}: {
+  data: StockData[];
+}) => {
+  if (!data) return <>Loading ...</>;
   return <div>{renderStockData(data)}</div>;
 };
