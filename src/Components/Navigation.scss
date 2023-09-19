@@ -16,7 +16,7 @@
   box-shadow: 0 2px 4px $box-shadow-color-default;
 
   .active {
-    color: $text-color-black;
+    color: $text-color-white; 
     background-color: $button-bg-active;
     transition: background-color 0.4s ease, transform 0.3s ease;
   }

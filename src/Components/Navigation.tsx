@@ -67,15 +67,6 @@ function Navigation({
             );
           }}
         />
-        {/* {items.map((item, index) => (
-          <CustomButton
-            title={item}
-            isActive={activeButton === item}
-            onClick={() => {
-              setActiveButton(item);
-            }}
-          />
-        ))} */}
       </div>
     </nav>
   );

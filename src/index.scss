@@ -20,7 +20,7 @@ $border-color: #c7c7c7;
 
 // Button
 $button-bg-hover: #d6d6d6;
-$button-bg-active: rgb(44, 175, 254); // #d7d9e9; // #c7c7c7;
+$button-bg-active: #2caffe;
 $button-bg-default: #ffffff;
 
 // Card
@@ -28,6 +28,8 @@ $card-bg: #ffffff;
 $card-border-color: #eeeeee;
 
 // Box Shadow
+$box-shadow-footer: 2px 3px 2px 4px;
+// Box Shadow Color
 $box-shadow-color-default: #00000033;
 $box-shadow-color-secondary: #a9a9a980;
 
@@ -39,17 +41,11 @@ $box-shadow-color-secondary: #a9a9a980;
   font-size: 1em;
 }
 
+/* Center a element */
 @mixin flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-@mixin border-style {
-  box-sizing: border-box;
-  border-width: 0;
-  border-style: solid;
-  border-color: $border-color;
 }
 
 @mixin border-radius($radius) {
@@ -60,13 +56,12 @@ $box-shadow-color-secondary: #a9a9a980;
 
 /* Main container */
 .container {
-  background-color: rgb(255, 255, 255);
+  background-color: $primary-color;
   opacity: 1;
   height: 100vh;
 }
 
 /* Navbar container */
-
 .card-container {
   display: flex;
   flex-flow: row wrap;
@@ -80,7 +75,7 @@ $box-shadow-color-secondary: #a9a9a980;
 
 .card {
   flex: wrap;
-  min-width: 420px;
+  min-width: 30%;
 
   border: 1px solid $card-border-color;
   @include border-radius(8px);
@@ -92,8 +87,9 @@ $box-shadow-color-secondary: #a9a9a980;
 }
 
 .stock-container {
-  flex-grow: 1;
-  width: 565px;
+  flex-grow: 1; // For mobile support
+  min-width: 300px;
+  width: 500px;
 }
 
 .chart-container {
@@ -109,8 +105,7 @@ footer {
   background-color: $primary-color;
   color: $text-color-primary;
 
-  // @include border-style();
-  box-shadow: 2px 3px 2px 4px $box-shadow-color-default;
+  box-shadow: $box-shadow-footer $box-shadow-color-default;
 
   .logo {
     margin: 0 0.5rem 0 0.5rem;
@@ -120,7 +115,6 @@ footer {
 
 table {
   width: 50vw;
-  // width: 565px;
 
   tbody {
     td {
@@ -138,11 +132,9 @@ table {
 .title {
   color: $text-color-dark-grey;
 }
+
 .desc {
   color: $text-color-primary;
   padding-top: 1rem;
   font-size: 18px;
-}
-
-@media screen and (min-width: 900px) {
 }
