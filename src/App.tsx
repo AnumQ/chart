@@ -31,7 +31,7 @@ function App() {
     fetchDataForPeriod(DAILY_PERIOD);
     fetchDataForPeriod(WEEKLY_PERIOD);
     fetchDataForPeriod(MONTHLY_PERIOD);
-  }, [activeButton, stockTitle]);
+  }, [activeButton]);
 
   useEffect(() => {
     if (search.length > 0) {
@@ -93,14 +93,15 @@ function App() {
         />
       </header>
       <div className="card-container">
+        {/* Render charts for all periods */}
         {[DAILY_PERIOD, WEEKLY_PERIOD, MONTHLY_PERIOD, MONTHLY_PERIOD].map(
           renderChart
         )}
-        <div className="card w-100">
+        {/* Display data in a table */}
+        {/* <div className="card table">
           <StockDataTable data={data.d.slice(1, 10)} />
-        </div>
+        </div> */}
       </div>
-
       <footer>
         <i className="fa-sharp fa-solid fa-copyright logo"></i>
         <p>Copyright 2023 </p>

@@ -1,0 +1,44 @@
+/* Switch */
+
+// Variables for switch colors
+$switch-bg-off: #ccc;
+$switch-bg-on: #2196f3;
+$slider-bg-off: rgb(255, 255, 255);
+$slider-bg-on: white;
+
+// Style for the switch container
+.switch {
+  // padding-top: 1.25rem; // Equivalent to 20px
+  margin-right: 1.25rem; // Equivalent to 20px
+  position: relative;
+  display: inline-block;
+  border-radius: 1.25rem; // Equivalent to 20px
+  width: 3.75rem; // Equivalent to 60px
+  height: 2.125rem; // Equivalent to 34px
+  cursor: pointer;
+  user-select: none;
+
+  &.off {
+    background-color: $switch-bg-off;
+  }
+
+  &.on {
+    background-color: $switch-bg-on;
+  }
+
+  .slider {
+    position: absolute;
+    left: 0.1875rem; // Equivalent to 0.2px (minor adjustment)
+    height: 1.625rem; // Equivalent to 26px
+    width: 1.625rem; // Equivalent to 26px
+    background-color: $slider-bg-off;
+    transition: 0.4s;
+    border-radius: 50%;
+    bottom: 0.25rem; // Equivalent to 4px
+
+    &.on {
+      background-color: $slider-bg-on;
+      transform: translateX(1.625rem); // Equivalent to 26px
+    }
+  }
+}

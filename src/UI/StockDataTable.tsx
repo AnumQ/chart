@@ -10,7 +10,7 @@ export const StockDataTable: React.FC<StockDataProps> = ({
     <>
       <h3 className="center title">Stock Data Table</h3>
       <div>{renderStockData(data)}</div>
-      <p className="center desc">Only the first 10 entries are shown</p>
+      <p className="center desc">Only the first 10 entries are displayed</p>
     </>
   );
 };

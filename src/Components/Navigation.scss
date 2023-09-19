@@ -1,0 +1,68 @@
+@import "./../index.scss";
+
+.navbar {
+  /* Center the content horizontally */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: inherit;
+
+  /* Border style */
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: $border-color;
+  box-shadow: 0 2px 4px $box-shadow-color-default;
+
+  .active {
+    color: $text-color-black;
+    background-color: $button-bg-active;
+    transition: background-color 0.4s ease, transform 0.3s ease;
+  }
+
+  button {
+    font-size: 1em;
+    color: $text-color-primary; /* Text color */
+    padding: 16px 30px 16px 30px;
+    margin: 10px 10px 10px 10px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 0 5px $box-shadow-color-secondary;
+
+    background-color: $button-bg-default;
+    cursor: pointer;
+    letter-spacing: 3px;
+
+    &:hover {
+      background-color: $button-bg-hover;
+      transition: background-color 0.4s ease, transform 0.3s ease;
+    }
+  }
+
+  .left {
+    display: inherit;
+    padding-left: 1rem;
+
+    .logo {
+      @include icon-font-awesome;
+      margin-top: 0.6rem;
+    }
+  }
+
+  .right {
+    @include flex-center();
+    margin-right: 2rem;
+  }
+}
+
+/* Search input field style */
+.search {
+  line-height: 1.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.4rem 0.375rem 0.75rem;
+  margin-left: 20px; // 1.25rem
+  box-shadow: 0 0 5px $box-shadow-color-secondary;
+  border: 1px solid $border-color;
+}

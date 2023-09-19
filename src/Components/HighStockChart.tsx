@@ -9,7 +9,6 @@ interface HighStockChartProps {
   stock: string;
   period: string;
 }
-/* Using the pre-built stockChart component from Highchart */
 const HighStockChart: React.FC<HighStockChartProps> = ({
   data,
   chartId,
@@ -30,7 +29,6 @@ const HighStockChart: React.FC<HighStockChartProps> = ({
 
 export default HighStockChart;
 
-/* Format data and use this data to derive chart options */
 function createChartOptions(data: StockData[], stock: string, period: string) {
   const formattedData = formatDataForHighstock(data);
   return getChartOptions(formattedData, stock, period);

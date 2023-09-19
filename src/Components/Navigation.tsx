@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import CustomButton from "../UI/CustomButton";
 import { NAV_ITEM_DEMO, NAV_ITEM_LIVE } from "../Helpers/Constants";
+import Switch from "../UI/Switch";
+import "./Navigation.scss";
 
 type NavigationProps = {
   activeButton: string;
@@ -14,8 +16,6 @@ function Navigation({
   setActiveButton,
   setSearch,
 }: NavigationProps) {
-  const items = [NAV_ITEM_DEMO, NAV_ITEM_LIVE];
-
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyPress = (e: { key: string }) => {
@@ -48,8 +48,26 @@ function Navigation({
           ></input>
         </div>
       </div>
-      <div>
-        {items.map((item, index) => (
+
+      <div className="right">
+        <Switch
+          isActive={activeButton !== NAV_ITEM_DEMO}
+          onClick={() => {
+            setActiveButton((prev) =>
+              prev === NAV_ITEM_DEMO ? NAV_ITEM_LIVE : NAV_ITEM_DEMO
+            );
+          }}
+        />
+        <CustomButton
+          title={NAV_ITEM_LIVE}
+          isActive={activeButton !== NAV_ITEM_DEMO}
+          onClick={() => {
+            setActiveButton((prev) =>
+              prev === NAV_ITEM_DEMO ? NAV_ITEM_LIVE : NAV_ITEM_DEMO
+            );
+          }}
+        />
+        {/* {items.map((item, index) => (
           <CustomButton
             title={item}
             isActive={activeButton === item}
@@ -57,7 +75,7 @@ function Navigation({
               setActiveButton(item);
             }}
           />
-        ))}
+        ))} */}
       </div>
     </nav>
   );
