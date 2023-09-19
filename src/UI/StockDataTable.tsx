@@ -1,10 +1,24 @@
-import { StockData, StockDataProps } from "../Models/StockData";
+import { StockData, StockDataProps } from "../Interfaces/StockData";
+
+export const StockDataTable: React.FC<StockDataProps> = ({
+  data,
+}: {
+  data: StockData[];
+}) => {
+  if (!data) return <>Loading ...</>;
+  return (
+    <>
+      <h3 className="center title">Stock Data Table</h3>
+      <div>{renderStockData(data)}</div>
+      <p className="center desc">Only the first 10 entries are shown</p>
+    </>
+  );
+};
+
 const renderStockData = (data: StockData[]) => {
   if (data.length === 0) {
     return <p>No data available</p>;
   }
-
-  console.log(data);
 
   return (
     <table>
@@ -34,13 +48,4 @@ const renderStockData = (data: StockData[]) => {
       </tbody>
     </table>
   );
-};
-
-export const StockDataTable: React.FC<StockDataProps> = ({
-  data,
-}: {
-  data: StockData[];
-}) => {
-  if (!data) return <>Loading ...</>;
-  return <div>{renderStockData(data)}</div>;
 };

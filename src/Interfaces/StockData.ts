@@ -11,3 +11,10 @@ export interface StockData {
 export interface StockDataProps {
   data: StockData[];
 }
+
+export interface DataState {
+  [key: string]: StockData[];
+  d: StockData[];
+  w: StockData[];
+  m: StockData[];
+}

@@ -1,9 +1,12 @@
-const symbol = "MCD.US";
-const apiToken = "demo"; // Replace with the actual API token
-const period = "d"; // Options: d, w, m, default: d
-const format = "json"; // You can customize the format as needed
+const format = "json";
 
-export const buildURL = (fromDate: string, toDate: string) => {
-  const url = `https://eodhd.com/api/eod/${symbol}?api_token=${apiToken}&period=${period}&fmt=${format}&from=${fromDate}&to=${toDate}`;
+export const buildURL = (
+  apiToken: string,
+  fromDate: string,
+  toDate: string,
+  stock: string,
+  period: string
+) => {
+  const url = `https://eodhd.com/api/eod/${stock}?api_token=${apiToken}&period=${period}&fmt=${format}&from=${fromDate}&to=${toDate}`;
   return url;
 };
