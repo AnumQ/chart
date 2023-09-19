@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { StockDataTable } from "./UI/StockDataTable";
-import HighStockChart from "./HighStockChart";
-import { buildURL } from "./URLbuilder";
-import Navigation from "./Navigation";
+import HighStockChart from "./Components/HighStockChart";
+import { buildURL } from "./Helpers/URLbuilder";
+import Navigation from "./Components/Navigation";
 import {
   DEFAULT_STOCK_TITLE,
   NAV_ITEM_DEMO,
@@ -17,7 +17,7 @@ import {
   DAILY_PERIOD,
   WEEKLY_PERIOD,
   MONTHLY_PERIOD,
-} from "./Constants";
+} from "./Helpers/Constants";
 import { DataState, StockData } from "./Interfaces/StockData";
 
 function App() {

@@ -142,7 +142,7 @@ $box-shadow-color-search: #a9a9a980;
 
 .card {
   flex: wrap;
-  min-width: 45%;
+  min-width: 420px;
   width: 565px;
   border: 1px solid $card-border-color;
   @include border-radius(8px);
@@ -201,4 +201,5 @@ table {
 .desc {
   color: $text-color-primary;
   padding-top: 1rem;
+  font-size: 18px;
 }

@@ -1,7 +1,7 @@
 // Navigation
 import React, { useState } from "react";
-import CustomButton from "./UI/CustomButton";
-import { NAV_ITEM_DEMO, NAV_ITEM_LIVE } from "./Constants";
+import CustomButton from "../UI/CustomButton";
+import { NAV_ITEM_DEMO, NAV_ITEM_LIVE } from "../Helpers/Constants";
 
 type NavigationProps = {
   activeButton: string;

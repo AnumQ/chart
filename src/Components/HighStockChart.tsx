@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts/highstock";
-import { StockData } from "./Interfaces/StockData";
+import { StockData } from "../Interfaces/StockData";
 
 interface HighStockChartProps {
   data: StockData[];
