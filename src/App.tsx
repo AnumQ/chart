@@ -20,6 +20,7 @@ function App() {
   } = useData();
 
   const [search, setSearch] = useState<string>("");
+
   useEffect(() => {
     if (search.length > 0) {
       fetchAllPeriodsWithStock(search);
@@ -51,9 +52,7 @@ function App() {
       </header>
       <div className="card-container">
         {/* Render charts for all periods */}
-        {[DAILY_PERIOD, WEEKLY_PERIOD, MONTHLY_PERIOD, MONTHLY_PERIOD].map(
-          renderChart
-        )}
+        {[DAILY_PERIOD, WEEKLY_PERIOD, MONTHLY_PERIOD].map(renderChart)}
         {/* Display data in a table */}
         {/* <div className="card table">
           <StockDataTable data={data.d.slice(1, 10)} />
