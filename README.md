@@ -1,23 +1,27 @@
 # Stock charts
-## Development
 
-### Installation
+## Installation
 
 To get started, install packages.
 
-#### `npm i`
+```
+npm i
+```
 
-### Local server
+## Development
 
 Runs the app in the development mode.
 
-#### `npm start`
+```
+npm start
+```
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-
 ## Deployment
 
-### `vercel`
+Deploy the project to vercel by running the following command in the root directory. 
 
-Deploys the project to vercel 
+```
+vercel
+```
