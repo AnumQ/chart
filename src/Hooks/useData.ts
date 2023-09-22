@@ -24,20 +24,70 @@ export const useData = () => {
   const [cardClass, setCardClass] = useState(CARD);
 
   useEffect(() => {
-    fetchAllPeriods();
-  }, [activeButton]);
+    // Fetch data for all periods (daily, monthly, weekly)
+    fetchData();
+  }, [activeButton, stockTitle]);
 
-  const fetchAllPeriods = () => {
-    [DAILY_PERIOD, WEEKLY_PERIOD, MONTHLY_PERIOD].forEach((period) => {
-      fetchDataForPeriod(period);
-    });
+  const fetchData = async () => {
+    try {
+      const [dailyData, weeklyData, monthlyData] = await Promise.all([
+        fetchDataForPeriod(DAILY_PERIOD),
+        fetchDataForPeriod(WEEKLY_PERIOD),
+        fetchDataForPeriod(MONTHLY_PERIOD),
+      ]);
+
+      // Check if any data fetching resulted in an error
+      if (
+        dailyData instanceof Error ||
+        weeklyData instanceof Error ||
+        monthlyData instanceof Error
+      ) {
+        console.error("Error occurred while fetching data");
+      } else {
+        // Update the state with the fetched data
+        setData({
+          d: dailyData,
+          w: weeklyData,
+          m: monthlyData,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setCardClass(CARD);
+    }
   };
 
-  const fetchAllPeriodsWithStock = (stock: string) => {
+  // Fetches all periods with stock name
+  const fetchAllPeriodsWithStock = async (stock: string) => {
     setStockTitle(stock);
-    [DAILY_PERIOD, WEEKLY_PERIOD, MONTHLY_PERIOD].forEach((period) => {
-      fetchDataForPeriod(period, stock);
-    });
+    try {
+      const [dailyData, weeklyData, monthlyData] = await Promise.all([
+        fetchDataForPeriod(DAILY_PERIOD, stock),
+        fetchDataForPeriod(WEEKLY_PERIOD, stock),
+        fetchDataForPeriod(MONTHLY_PERIOD, stock),
+      ]);
+
+      // Check if any data fetching resulted in an error
+      if (
+        dailyData instanceof Error ||
+        weeklyData instanceof Error ||
+        monthlyData instanceof Error
+      ) {
+        console.error("Error occurred while fetching data");
+      } else {
+        // Update the state with the fetched data
+        setData({
+          d: dailyData,
+          w: weeklyData,
+          m: monthlyData,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setCardClass(CARD);
+    }
   };
 
   const fetchDataForPeriod = async (period: string, stock?: string) => {
@@ -50,10 +100,7 @@ export const useData = () => {
       );
 
       if (response.status === 200) {
-        setData((prevState) => ({
-          ...prevState,
-          [period]: response.data,
-        }));
+        return response.data;
       } else {
         throw new Error("Network response was not 200");
       }
