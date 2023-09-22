@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DataState } from "../Interfaces/StockData";
 import {
   CARD,
   CARD_BLUR,
   DAILY_PERIOD,
   DEFAULT_STOCK_TITLE,
-  DEMO_API_TOKEN,
   END_DATE,
-  LIVE_API_TOKEN,
   MONTHLY_PERIOD,
-  NAV_ITEM_DEMO,
-  NAV_ITEM_LIVE,
   START_DATE,
   WEEKLY_PERIOD,
 } from "../Helpers/Constants";
@@ -18,24 +14,19 @@ import axios from "axios";
 import { buildURL } from "../Helpers/URLbuilder";
 
 export const useData = () => {
-  const [stockTitle, setStockTitle] = useState(DEFAULT_STOCK_TITLE);
-  const [activeButton, setActiveButton] = useState<string>(NAV_ITEM_DEMO);
   const [data, setData] = useState<DataState>(initialState);
   const [cardClass, setCardClass] = useState(CARD);
 
-  useEffect(() => {
-    fetchData();
-  }, [activeButton, stockTitle]); // TODO: fix the requirement of stockTitle, should not be used like this
-
   /*  Fetches stock data from api
   Uses default stock if no stock is specified */
-  const fetchData = async (stock?: string) => {
+  const fetchData = async (apiToken: string, stock?: string) => {
+    setCardClass(CARD_BLUR);
+
     try {
-      setCardClass(CARD_BLUR);
       const [dailyData, weeklyData, monthlyData] = await Promise.all([
-        fetchDataForPeriod(DAILY_PERIOD, stock),
-        fetchDataForPeriod(WEEKLY_PERIOD, stock),
-        fetchDataForPeriod(MONTHLY_PERIOD, stock),
+        fetchDataForPeriod(apiToken, DAILY_PERIOD, stock),
+        fetchDataForPeriod(apiToken, WEEKLY_PERIOD, stock),
+        fetchDataForPeriod(apiToken, MONTHLY_PERIOD, stock),
       ]);
       if (
         dailyData instanceof Error ||
@@ -58,7 +49,6 @@ export const useData = () => {
   };
 
   const fetchAllPeriodsWithStock = async (stock: string) => {
-    setStockTitle(stock);
     try {
       await fetchData(stock);
     } catch (error) {
@@ -66,12 +56,15 @@ export const useData = () => {
     }
   };
 
-  const fetchDataForPeriod = async (period: string, stock?: string) => {
+  const fetchDataForPeriod = async (
+    apiToken: string,
+    period: string,
+    stock?: string
+  ) => {
     try {
-      const apiToken = fetchApiToken(activeButton);
-      const response = await axios.get(
-        buildURL(apiToken, START_DATE, END_DATE, stock || stockTitle, period)
-      );
+      let stockName = stock ?? DEFAULT_STOCK_TITLE;
+      const url = buildURL(apiToken, START_DATE, END_DATE, stockName, period);
+      const response = await axios.get(url);
       if (response.status === 200) {
         return response.data;
       } else {
@@ -88,22 +81,10 @@ export const useData = () => {
     setData,
     cardClass,
     setCardClass,
-    stockTitle,
-    setStockTitle,
-    activeButton,
-    setActiveButton,
+    fetchData,
     fetchAllPeriodsWithStock,
   };
 };
-
-function fetchApiToken(activeButton: string) {
-  const apiTokens: Record<string, string> = {
-    [NAV_ITEM_DEMO]: DEMO_API_TOKEN,
-    [NAV_ITEM_LIVE]: LIVE_API_TOKEN,
-  };
-
-  return apiTokens[activeButton] || DEMO_API_TOKEN;
-}
 
 const initialState = {
   d: [],

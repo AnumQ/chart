@@ -8,13 +8,17 @@ import "./Navigation.scss";
 type NavigationProps = {
   activeButton: string;
   setActiveButton: React.Dispatch<React.SetStateAction<string>>;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setSearch: React.Dispatch<React.SetStateAction<string | null>>;
+  isLive: boolean;
+  toggleLive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function Navigation({
   activeButton,
   setActiveButton,
   setSearch,
+  isLive,
+  toggleLive,
 }: NavigationProps) {
   const [inputValue, setInputValue] = useState("");
 
@@ -51,17 +55,16 @@ function Navigation({
 
       <div className="right">
         <Switch
-          isActive={activeButton !== NAV_ITEM_DEMO}
+          isActive={isLive}
           onClick={() => {
-            setActiveButton((prev) =>
-              prev === NAV_ITEM_DEMO ? NAV_ITEM_LIVE : NAV_ITEM_DEMO
-            );
+            toggleLive(!isLive);
           }}
         />
         <CustomButton
           title={NAV_ITEM_LIVE}
-          isActive={activeButton !== NAV_ITEM_DEMO}
+          isActive={isLive}
           onClick={() => {
+            toggleLive(!isLive);
             setActiveButton((prev) =>
               prev === NAV_ITEM_DEMO ? NAV_ITEM_LIVE : NAV_ITEM_DEMO
             );

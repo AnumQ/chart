@@ -5,27 +5,32 @@ import {
   DAILY_PERIOD,
   WEEKLY_PERIOD,
   MONTHLY_PERIOD,
+  DEFAULT_STOCK_TITLE,
+  NAV_ITEM_DEMO,
+  DEMO_API_TOKEN,
+  LIVE_API_TOKEN,
 } from "./Helpers/Constants";
 import { StockData } from "./Interfaces/StockData";
 import { useData } from "./Hooks/useData";
 
 function App() {
-  const {
-    data,
-    cardClass,
-    stockTitle,
-    activeButton,
-    setActiveButton,
-    fetchAllPeriodsWithStock,
-  } = useData();
+  const { data, cardClass, fetchData, fetchAllPeriodsWithStock } = useData();
 
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string | null>(null);
+  const [isLive, toggleLive] = useState(false);
+  const [activeButton, setActiveButton] = useState<string>(NAV_ITEM_DEMO);
 
   useEffect(() => {
-    if (search.length > 0) {
-      fetchAllPeriodsWithStock(search);
+    if (search && search.length > 0) {
+      // Fetch stock data for all periods
+      fetchAllPeriodsWithStock(search); // TODO: split
     }
-  }, [search]);
+  }, [search]); // TODO: fix it
+
+  useEffect(() => {
+    const apiToken = isLive ? LIVE_API_TOKEN : DEMO_API_TOKEN;
+    fetchData(apiToken);
+  }, [isLive]);
 
   // Renders stock chart for a specific period
   const renderChart = (period: string, index: number) => {
@@ -34,7 +39,7 @@ function App() {
         <HighStockChart
           data={data[period] as StockData[]}
           chartId={`stock-chart-${index + 1}`}
-          stock={stockTitle}
+          stock={search ?? DEFAULT_STOCK_TITLE}
           period={periodLabels[period] || ""}
         />
       </div>
@@ -48,15 +53,13 @@ function App() {
           activeButton={activeButton}
           setActiveButton={setActiveButton}
           setSearch={setSearch}
+          isLive={isLive}
+          toggleLive={toggleLive}
         />
       </header>
       <div className="card-container">
         {/* Render charts for all periods */}
         {[DAILY_PERIOD, WEEKLY_PERIOD, MONTHLY_PERIOD].map(renderChart)}
-        {/* Display data in a table */}
-        {/* <div className="card table">
-          <StockDataTable data={data.d.slice(1, 10)} />
-        </div> */}
       </div>
       <footer>
         <i className="fa-sharp fa-solid fa-copyright logo"></i>
