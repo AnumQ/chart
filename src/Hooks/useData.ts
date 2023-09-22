@@ -24,59 +24,26 @@ export const useData = () => {
   const [cardClass, setCardClass] = useState(CARD);
 
   useEffect(() => {
-    // Fetch data for all periods (daily, monthly, weekly)
     fetchData();
-  }, [activeButton, stockTitle]);
+  }, [activeButton, stockTitle]); // TODO: fix the requirement of stockTitle, should not be used like this
 
-  const fetchData = async () => {
+  /*  Fetches stock data from api
+  Uses default stock if no stock is specified */
+  const fetchData = async (stock?: string) => {
     try {
-      const [dailyData, weeklyData, monthlyData] = await Promise.all([
-        fetchDataForPeriod(DAILY_PERIOD),
-        fetchDataForPeriod(WEEKLY_PERIOD),
-        fetchDataForPeriod(MONTHLY_PERIOD),
-      ]);
-
-      // Check if any data fetching resulted in an error
-      if (
-        dailyData instanceof Error ||
-        weeklyData instanceof Error ||
-        monthlyData instanceof Error
-      ) {
-        console.error("Error occurred while fetching data");
-      } else {
-        // Update the state with the fetched data
-        setData({
-          d: dailyData,
-          w: weeklyData,
-          m: monthlyData,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setCardClass(CARD);
-    }
-  };
-
-  // Fetches all periods with stock name
-  const fetchAllPeriodsWithStock = async (stock: string) => {
-    setStockTitle(stock);
-    try {
+      setCardClass(CARD_BLUR);
       const [dailyData, weeklyData, monthlyData] = await Promise.all([
         fetchDataForPeriod(DAILY_PERIOD, stock),
         fetchDataForPeriod(WEEKLY_PERIOD, stock),
         fetchDataForPeriod(MONTHLY_PERIOD, stock),
       ]);
-
-      // Check if any data fetching resulted in an error
       if (
         dailyData instanceof Error ||
         weeklyData instanceof Error ||
         monthlyData instanceof Error
       ) {
-        console.error("Error occurred while fetching data");
+        throw new Error("Error occurred while fetching data");
       } else {
-        // Update the state with the fetched data
         setData({
           d: dailyData,
           w: weeklyData,
@@ -90,15 +57,21 @@ export const useData = () => {
     }
   };
 
+  const fetchAllPeriodsWithStock = async (stock: string) => {
+    setStockTitle(stock);
+    try {
+      await fetchData(stock);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const fetchDataForPeriod = async (period: string, stock?: string) => {
     try {
-      setCardClass(CARD_BLUR);
-
       const apiToken = fetchApiToken(activeButton);
       const response = await axios.get(
         buildURL(apiToken, START_DATE, END_DATE, stock || stockTitle, period)
       );
-
       if (response.status === 200) {
         return response.data;
       } else {
@@ -106,8 +79,7 @@ export const useData = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-    } finally {
-      setCardClass(CARD);
+      return error;
     }
   };
 
