@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DataState } from "../Interfaces/StockData";
+import { DataState, StockData } from "../Interfaces/StockData";
 import {
   CARD,
   CARD_BLUR,
@@ -10,41 +10,33 @@ import {
   START_DATE,
   WEEKLY_PERIOD,
 } from "../Helpers/Constants";
-import axios from "axios";
 import { buildURL } from "../Helpers/URLbuilder";
+import { ApiService } from "../Services/ApiService";
 
 export const useData = () => {
+  const apiService = new ApiService();
+
   const [data, setData] = useState<DataState>(initialState);
   const [cardClass, setCardClass] = useState(CARD);
 
   /*  Fetches stock data from api
-  Uses default stock if no stock is specified */
+   Default stock is used if stock is not specified */
   const fetchData = async (apiToken: string, stock?: string) => {
     setCardClass(CARD_BLUR);
 
-    try {
-      const [dailyData, weeklyData, monthlyData] = await Promise.all([
-        fetchDataForPeriod(apiToken, DAILY_PERIOD, stock),
-        fetchDataForPeriod(apiToken, WEEKLY_PERIOD, stock),
-        fetchDataForPeriod(apiToken, MONTHLY_PERIOD, stock),
-      ]);
-      if (
-        dailyData instanceof Error ||
-        weeklyData instanceof Error ||
-        monthlyData instanceof Error
-      ) {
-        throw new Error("Error occurred while fetching data");
-      } else {
-        setData({
-          d: dailyData,
-          w: weeklyData,
-          m: monthlyData,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setCardClass(CARD);
+    const [dailyData, weeklyData, monthlyData] = await Promise.all([
+      fetchDataForPeriod(apiToken, DAILY_PERIOD, stock),
+      fetchDataForPeriod(apiToken, WEEKLY_PERIOD, stock),
+      fetchDataForPeriod(apiToken, MONTHLY_PERIOD, stock),
+    ]);
+    if (dailyData && weeklyData && monthlyData) {
+      setData({
+        d: dailyData,
+        w: weeklyData,
+        m: monthlyData,
+      });
+    } else {
+      console.error("Unable to fetch data");
     }
   };
 
@@ -60,19 +52,17 @@ export const useData = () => {
     apiToken: string,
     period: string,
     stock?: string
-  ) => {
-    try {
-      let stockName = stock ?? DEFAULT_STOCK_TITLE;
-      const url = buildURL(apiToken, START_DATE, END_DATE, stockName, period);
-      const response = await axios.get(url);
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error("Network response was not 200");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return error;
+  ): Promise<StockData[] | undefined> => {
+    let stockName = stock ?? DEFAULT_STOCK_TITLE;
+    const url = buildURL(apiToken, START_DATE, END_DATE, stockName, period);
+
+    const data = await apiService.get<StockData[] | undefined>(url);
+    const stockData = data as StockData[];
+    if (stockData) {
+      return stockData as StockData[];
+    } else {
+      alert("Data type is not a list of StockData");
+      return;
     }
   };
 
