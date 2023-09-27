@@ -25,9 +25,16 @@ export const E101_CODE = "E101";
 export const E102_CODE = "E102";
 export const E103_CODE = "E103";
 export const E104_CODE = "E104";
+export const E107_CODE = "E107";
+export const E108_CODE = "E108";
 
 // Error Messages
 export const E101_MSG = "Request failed";
 export const E102_MSG =
-  "Response received. Expected status 200, but response status is ";
+  "Response received. Expected status 200, but response status is:";
 export const E103_MSG = "E103_MSG";
+export const E104_MSG = "Failed to fetch Data for period:";
+export const E105_MSG = "One or more stock data is undefined.";
+export const E106_MSG = "Error occured in fetch all periods with stock";
+export const E107_MSG = "Unknown error occured.";
+export const E108_MSG = "Stockdata is in not in the expected format.";

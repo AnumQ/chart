@@ -11,7 +11,7 @@ import {
   LIVE_API_TOKEN,
 } from "./Helpers/Constants";
 import { StockData } from "./Interfaces/StockData";
-import { useData } from "./Hooks/useData";
+import useData from "./Hooks/useData";
 
 function App() {
   const { data, cardClass, fetchData, fetchAllPeriodsWithStock } = useData();
@@ -28,6 +28,7 @@ function App() {
   }, [search]); // TODO: fix it
 
   useEffect(() => {
+    console.log("is Live being called"); // TODO: why is this being called twice?
     const apiToken = isLive ? LIVE_API_TOKEN : DEMO_API_TOKEN;
     fetchData(apiToken);
   }, [isLive]);
