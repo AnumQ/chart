@@ -35,6 +35,6 @@ export const E102_MSG =
 export const E103_MSG = "E103_MSG";
 export const E104_MSG = "Failed to fetch Data for period:";
 export const E105_MSG = "One or more stock data is undefined.";
-export const E106_MSG = "Error occured in fetch all periods with stock";
+export const E106_MSG = "Unable to fetch chart data for stock";
 export const E107_MSG = "Unknown error occured.";
 export const E108_MSG = "Stockdata is in not in the expected format.";

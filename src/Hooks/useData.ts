@@ -5,7 +5,6 @@ import {
   CARD_BLUR,
   DAILY_PERIOD,
   DEFAULT_STOCK_TITLE,
-  E104_MSG,
   E105_MSG,
   E106_MSG,
   E108_CODE,
@@ -16,8 +15,8 @@ import {
   WEEKLY_PERIOD,
 } from "../Helpers/Constants";
 import { buildURL } from "../Helpers/URLbuilder";
-import { ApiService } from "../Services/ApiService";
 import { AppError as Error } from "../AppError";
+import { ApiService } from "../Services/ApiService";
 
 const useData = () => {
   const apiService = new ApiService();
@@ -29,31 +28,34 @@ const useData = () => {
   };
 
   const [data, setData] = useState<DataState>(initialState);
-  const [cardClass, setCardClass] = useState(CARD);
+  const [isLoading, setLoading] = useState(false);
 
   /*  Fetches stock data from api
    Default stock is used if stock is not specified */
   const fetchData = async (apiToken: string, stock?: string) => {
-    setCardClass(CARD_BLUR);
-
-    const [dailyData, weeklyData, monthlyData] = await Promise.all([
-      fetchPeriod(apiToken, DAILY_PERIOD, stock),
-      fetchPeriod(apiToken, WEEKLY_PERIOD, stock),
-      fetchPeriod(apiToken, MONTHLY_PERIOD, stock),
-    ]);
-    if (dailyData && weeklyData && monthlyData) {
-      setData({
-        d: dailyData,
-        w: weeklyData,
-        m: monthlyData,
-      });
-    } else {
-      handleFetchDataError(dailyData, weeklyData, monthlyData);
+    setLoading(true);
+    try {
+      const [dailyData, weeklyData, monthlyData] = await Promise.all([
+        fetchPeriod(apiToken, DAILY_PERIOD, stock),
+        fetchPeriod(apiToken, WEEKLY_PERIOD, stock),
+        fetchPeriod(apiToken, MONTHLY_PERIOD, stock),
+      ]);
+      if (dailyData && weeklyData && monthlyData) {
+        setData({
+          d: dailyData,
+          w: weeklyData,
+          m: monthlyData,
+        });
+      } else {
+        handleFetchDataError(dailyData, weeklyData, monthlyData);
+      }
+      setLoading(false);
+    } catch (error) {
+      throw error;
     }
-    setCardClass(CARD);
   };
 
-  const fetchAllPeriodsWithStock = async (stock: string) => {
+  const fetchChartDataForStock = async (stock: string) => {
     try {
       await fetchData(stock);
     } catch (error) {
@@ -70,26 +72,23 @@ const useData = () => {
     const url = buildURL(apiToken, START_DATE, END_DATE, stockName, period);
 
     try {
-      const data = await apiService.get<StockData[] | undefined>(url);
-
+      const data = await apiService.get<StockData[]>(url);
       if (isArrayOfStockData(data)) {
         return data;
       } else {
         throw new Error(E108_MSG, E108_CODE);
       }
     } catch (error) {
-      if (error instanceof Error) handleFetchPeriodError(error, period);
-      return undefined;
+      throw error;
     }
   };
 
   return {
     data,
     setData,
-    cardClass,
-    setCardClass,
+    isLoading,
     fetchData,
-    fetchAllPeriodsWithStock,
+    fetchAllPeriodsWithStock: fetchChartDataForStock,
   };
 };
 
@@ -105,16 +104,12 @@ function handleFetchDataError(
   );
 }
 
-function handleFetchPeriodError(error: Error, period: string) {
-  console.error(`${E104_MSG} ${period}. Details: ${error.toString()}`);
-}
-
 function isArrayOfStockData(data: any): data is StockData[] {
   if (!Array.isArray(data)) {
     return false;
   }
 
-  // Check if every element in the array is of type StockData
+  // Check if every item in the array is of type StockData
   return data.every((item) => {
     return (
       (typeof item.date === "number" || typeof item.date === "string") &&

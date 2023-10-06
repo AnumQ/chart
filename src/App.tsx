@@ -9,12 +9,14 @@ import {
   NAV_ITEM_DEMO,
   DEMO_API_TOKEN,
   LIVE_API_TOKEN,
+  CARD_BLUR,
+  CARD,
 } from "./Helpers/Constants";
 import { StockData } from "./Interfaces/StockData";
 import useData from "./Hooks/useData";
 
 function App() {
-  const { data, cardClass, fetchData, fetchAllPeriodsWithStock } = useData();
+  const { data, isLoading, fetchData, fetchAllPeriodsWithStock } = useData();
 
   const [search, setSearch] = useState<string | null>(null);
   const [isLive, toggleLive] = useState(false);
@@ -36,7 +38,7 @@ function App() {
   // Renders stock chart for a specific period
   const renderChart = (period: string, index: number) => {
     return (
-      <div className={cardClass} key={index}>
+      <div className={isLoading ? CARD_BLUR : CARD} key={index}>
         <HighStockChart
           data={data[period] as StockData[]}
           chartId={`stock-chart-${index + 1}`}
