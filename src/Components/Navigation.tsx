@@ -4,28 +4,31 @@ import CustomButton from "../UI/CustomButton";
 import { NAV_ITEM_DEMO, NAV_ITEM_LIVE } from "../Helpers/Constants";
 import Switch from "../UI/Switch";
 import "./Navigation.scss";
+import { useNavContext } from "../Contexts/NavigationContext";
 
 type NavigationProps = {
   activeButton: string;
   setActiveButton: React.Dispatch<React.SetStateAction<string>>;
-  setSearch: React.Dispatch<React.SetStateAction<string | null>>;
-  isLive: boolean;
-  toggleLive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Navigation({
-  activeButton,
-  setActiveButton,
-  setSearch,
-  isLive,
-  toggleLive,
-}: NavigationProps) {
+function Navigation({ activeButton, setActiveButton }: NavigationProps) {
   const [inputValue, setInputValue] = useState("");
+  const { navState, setState } = useNavContext();
 
   const handleKeyPress = (e: { key: string }) => {
     if (e.key === "Enter") {
-      setSearch(inputValue);
+      setState((prevState) => ({
+        ...prevState,
+        search: inputValue,
+      }));
     }
+  };
+
+  const toggleLive = () => {
+    setState((prevState) => ({
+      ...prevState,
+      isLive: !prevState.isLive,
+    }));
   };
 
   const handleChange = (e: {
@@ -55,16 +58,16 @@ function Navigation({
 
       <div className="right">
         <Switch
-          isActive={isLive}
+          isActive={navState.isLive}
           onClick={() => {
-            toggleLive(!isLive);
+            toggleLive();
           }}
         />
         <CustomButton
           title={NAV_ITEM_LIVE}
-          isActive={isLive}
+          isActive={navState.isLive}
           onClick={() => {
-            toggleLive(!isLive);
+            toggleLive();
             setActiveButton((prev) =>
               prev === NAV_ITEM_DEMO ? NAV_ITEM_LIVE : NAV_ITEM_DEMO
             );

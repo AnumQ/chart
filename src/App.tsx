@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import HighStockChart from "./Components/HighStockChart";
 import Navigation from "./Components/Navigation";
@@ -7,33 +8,29 @@ import {
   MONTHLY_PERIOD,
   DEFAULT_STOCK_TITLE,
   NAV_ITEM_DEMO,
-  DEMO_API_TOKEN,
-  LIVE_API_TOKEN,
   CARD_BLUR,
   CARD,
 } from "./Helpers/Constants";
 import { StockData } from "./Interfaces/StockData";
 import useData from "./Hooks/useData";
+import { useNavContext } from "./Contexts/NavigationContext";
 
 function App() {
-  const { data, isLoading, fetchData, fetchAllPeriodsWithStock } = useData();
-
-  const [search, setSearch] = useState<string | null>(null);
-  const [isLive, toggleLive] = useState(false);
+  const { data, isLoading, fetchData } = useData();
+  const { navState } = useNavContext();
   const [activeButton, setActiveButton] = useState<string>(NAV_ITEM_DEMO);
 
   useEffect(() => {
-    if (search && search.length > 0) {
-      // Fetch stock data for all periods
-      fetchAllPeriodsWithStock(search); // TODO: split
+    if (navState.search && navState.search.length > 0) {
+      // Fetches stock data for all periods with stock
+      fetchData(navState.search);
     }
-  }, [search]); // TODO: fix it
+  }, [navState.search]);
 
   useEffect(() => {
-    console.log("is Live being called"); // TODO: why is this being called twice?
-    const apiToken = isLive ? LIVE_API_TOKEN : DEMO_API_TOKEN;
-    fetchData(apiToken);
-  }, [isLive]);
+    // Fetches data for all periods based on LIVE or DEMO
+    fetchData();
+  }, [navState.isLive]);
 
   // Renders stock chart for a specific period
   const renderChart = (period: string, index: number) => {
@@ -42,7 +39,7 @@ function App() {
         <HighStockChart
           data={data[period] as StockData[]}
           chartId={`stock-chart-${index + 1}`}
-          stock={search ?? DEFAULT_STOCK_TITLE}
+          stock={navState.search ?? DEFAULT_STOCK_TITLE}
           period={periodLabels[period] || ""}
         />
       </div>
@@ -55,9 +52,8 @@ function App() {
         <Navigation
           activeButton={activeButton}
           setActiveButton={setActiveButton}
-          setSearch={setSearch}
-          isLive={isLive}
-          toggleLive={toggleLive}
+          // isLive={isLive}
+          // toggleLive={toggleLive}
         />
       </header>
       <div className="card-container">

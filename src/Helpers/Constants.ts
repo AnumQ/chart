@@ -32,8 +32,8 @@ export const E108_CODE = "E108";
 export const E101_MSG = "Request failed";
 export const E102_MSG =
   "Response received. Expected status 200, but response status is:";
-export const E103_MSG = "E103_MSG";
-export const E104_MSG = "Failed to fetch Data for period:";
+export const E103_MSG = "Unknown error message detected";
+export const E104_MSG = "Caught error in fetch Stock Data All Periods";
 export const E105_MSG = "One or more stock data is undefined.";
 export const E106_MSG = "Unable to fetch chart data for stock";
 export const E107_MSG = "Unknown error occured.";

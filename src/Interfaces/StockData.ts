@@ -12,7 +12,7 @@ export interface StockDataProps {
   data: StockData[];
 }
 
-export interface DataState {
+export interface AppData {
   [key: string]: StockData[];
   d: StockData[];
   w: StockData[];
